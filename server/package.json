@@ -1,0 +1,21 @@
+{
+  "name": "@tictactoe/server",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "author": "Aleksandar Milicevic <aleksandarmilicevic18@gmail.com>",
+  "scripts": {
+    "build": "tsc",
+    "dev": "yarn build --watch --preserveWatchOutput",
+    "lint": "eslint src --ext js, ts"
+  },
+  "devDependencies": {
+    "eslint": "^7.20.0",
+    "typescript": "^4.1.5"
+  },
+  "volta": {
+    "node": "14.15.5",
+    "yarn": "1.22.10"
+  }
+}
