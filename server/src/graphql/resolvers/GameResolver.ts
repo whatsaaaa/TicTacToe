@@ -21,7 +21,7 @@ export default class {
   }
 
   @Query(returns => Game, { nullable: true })
-  gameById(@Arg("id") id: string): IGame | undefined {
+  getGameById(@Arg("id") id: string): IGame | undefined {
     return this.gameService.findOne(id);
   }
 

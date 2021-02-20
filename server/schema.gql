@@ -33,7 +33,7 @@ type Mutation {
 }
 
 type Query {
-  gameById(id: String!): Game
+  getGameById(id: String!): Game
   getGames: [Game!]!
   getMovesForRound(roundId: String!): [Move!]!
   getRounds: [Round!]!

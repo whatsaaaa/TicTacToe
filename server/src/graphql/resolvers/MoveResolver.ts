@@ -1,4 +1,4 @@
-import {Arg, Args, FieldResolver, Mutation, Query, Resolver, Root} from "type-graphql";
+import { Arg, Args, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql";
 import { Service } from "typedi";
 
 import { IMove } from "../../types";
