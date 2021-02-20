@@ -1,4 +1,4 @@
-import {Field, InputType} from "type-graphql";
+import { ArgsType, Field, InputType } from "type-graphql";
 
 @InputType({ description: "New game data" })
 export class CreateNewGameArgs {
@@ -7,4 +7,16 @@ export class CreateNewGameArgs {
 
   @Field()
   playerId: string;
+}
+
+@ArgsType()
+export class MakeMoveArgs {
+  @Field()
+  playerId: string;
+
+  @Field()
+  roundId: string;
+
+  @Field(type => [Number])
+  playerMove: number[];
 }

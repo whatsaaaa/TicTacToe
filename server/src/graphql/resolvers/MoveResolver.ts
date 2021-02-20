@@ -1,49 +1,34 @@
-import { Args, ArgsType, FieldResolver, Mutation, Query, Resolver, Root} from "type-graphql";
-import { v4 as uuidv4 } from 'uuid';
+import {Arg, Args, ArgsType, FieldResolver, Mutation, Query, Resolver, Root} from "type-graphql";
 import { Service } from "typedi";
 
-import { moves, rounds } from "../../data/data";
 import { IMove } from "../../types";
+import { MoveService } from "../../services/MoveService";
+import { RoundService } from "../../services/RoundService";
+import { MakeMoveArgs } from "../args";
 import Move from "../schemas/Move";
-import { Logger, LoggerInterface } from "../../logger/Logger";
 
-@ArgsType()
-class MakeMoveArgs {
-  playerId: string;
-  roundId: string;
-  playerMove: number[];
-}
+
 
 @Service()
 @Resolver(Move)
 export default class {
-
-  constructor(@Logger(__filename) private log: LoggerInterface) {
-  }
+  constructor(
+    private moveService: MoveService,
+    private roundService: RoundService
+  ) {}
 
   @Query(returns => [Move])
-  getMoves(): IMove[] {
-    this.log.info("Executing GraphQl Query [getMoves]");
-    return moves;
+  getMovesForRound(@Arg("roundId") roundId: string): IMove[] {
+    return this.moveService.getMovesForRound(roundId);
   }
 
   @Mutation(returns => Move)
   makeMove(@Args() { playerId, playerMove, roundId }: MakeMoveArgs): IMove {
-    const newMove: IMove =  {
-      playerId: playerId,
-      roundId: roundId,
-      id: uuidv4(),
-      move: playerMove
-    }
-
-    moves.push(newMove);
-    return newMove;
+    return this.moveService.makeMove(playerId, playerMove, roundId);
   }
 
   @FieldResolver()
   round(@Root() move: IMove) {
-    return rounds.find(round => {
-      return round.id === move.roundId;
-    });
+    return this.roundService.findRound(move.roundId);
   }
 }

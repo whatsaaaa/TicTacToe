@@ -14,7 +14,7 @@ type Game {
   name: String!
   playerOneId: String!
   playerTwoId: String!
-  rounds: Round!
+  rounds: [Round!]!
 }
 
 type Move {
@@ -27,12 +27,14 @@ type Move {
 type Mutation {
   createNewGame(data: CreateNewGameArgs!): Game!
   joinGame(gameId: String!, userId: String!): Game!
+  makeMove(playerId: String!, playerMove: [Float!]!, roundId: String!): Move!
   markRoundAsCompleted(playerId: String!, roundId: String!): Round!
 }
 
 type Query {
   gameById(id: String!): Game
   getGames: [Game!]!
+  getMovesForRound(roundId: String!): [Move!]!
   getRounds: [Round!]!
   getRoundsForGame(gameId: String!): [Round!]
 }

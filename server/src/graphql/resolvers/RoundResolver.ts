@@ -1,10 +1,10 @@
 import { Arg, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql";
 import { Service } from "typedi";
 
-import { moves } from "../../data/data";
 import { IRound } from "../../types";
 import { RoundService } from "../../services/RoundService";
-import {GameService} from "../../services/GameService";
+import { GameService } from "../../services/GameService";
+import { MoveService } from "../../services/MoveService";
 import Round from "../schemas/Round";
 
 
@@ -14,6 +14,7 @@ export default class {
   constructor(
     private roundService: RoundService,
     private gameService: GameService,
+    private moveService: MoveService
   ) {}
 
   @Query(returns => [Round])
@@ -38,8 +39,6 @@ export default class {
 
   @FieldResolver()
   moves(@Root() round: IRound) {
-    return moves.filter(move => {
-      return move.roundId === round.id;
-    });
+    return this.moveService.getMovesForRound(round.id);
   }
 }

@@ -16,6 +16,13 @@ export class RoundService {
     return rounds;
   }
 
+  public findRound(roundId: string): IRound | undefined {
+    this.log.info(`Finding round: ${roundId}`);
+    return rounds.find(round => {
+      return round.id === roundId;
+    });
+  }
+
   public getRoundsForGame(gameId: string): IRound[] | undefined {
     this.log.info(`Find rounds for game: ${gameId}`);
     return rounds.filter(round => {

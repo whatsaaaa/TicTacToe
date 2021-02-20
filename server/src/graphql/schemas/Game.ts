@@ -15,6 +15,6 @@ export default class Game {
   @Field()
   playerTwoId: string;
 
-  @Field(type => Round)
+  @Field(type => [Round])
   rounds: Round[];
 }
