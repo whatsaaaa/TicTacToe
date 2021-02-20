@@ -1,4 +1,4 @@
-import {Arg, Args, ArgsType, FieldResolver, Mutation, Query, Resolver, Root} from "type-graphql";
+import {Arg, Args, FieldResolver, Mutation, Query, Resolver, Root} from "type-graphql";
 import { Service } from "typedi";
 
 import { IMove } from "../../types";
@@ -6,8 +6,6 @@ import { MoveService } from "../../services/MoveService";
 import { RoundService } from "../../services/RoundService";
 import { MakeMoveArgs } from "../args";
 import Move from "../schemas/Move";
-
-
 
 @Service()
 @Resolver(Move)
