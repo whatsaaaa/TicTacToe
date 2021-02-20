@@ -27,11 +27,14 @@ type Move {
 type Mutation {
   createNewGame(data: CreateNewGameArgs!): Game!
   joinGame(gameId: String!, userId: String!): Game!
+  markRoundAsCompleted(playerId: String!, roundId: String!): Round!
 }
 
 type Query {
   gameById(id: String!): Game
   getGames: [Game!]!
+  getRounds: [Round!]!
+  getRoundsForGame(gameId: String!): [Round!]
 }
 
 type Round {

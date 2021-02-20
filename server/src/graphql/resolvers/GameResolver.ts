@@ -1,16 +1,19 @@
-import { Arg, FieldResolver, Query, Resolver, Root, Mutation, Args } from "type-graphql";
+import { Arg, FieldResolver, Query, Resolver, Root, Mutation } from "type-graphql";
 import { Service } from "typedi";
 
-import { rounds } from "../../data/data";
 import { IGame } from "../../types";
 import { GameService } from "../../services/GameService";
+import { RoundService } from "../../services/RoundService";
 import { CreateNewGameArgs } from "../args";
 import Game from "../schemas/Game";
 
 @Service()
 @Resolver(Game)
 export default class {
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private roundService: RoundService
+  ) {}
 
   @Query(returns => [Game])
   getGames(): IGame[] {
@@ -34,8 +37,6 @@ export default class {
 
   @FieldResolver()
   rounds(@Root() game: IGame) {
-    return rounds.filter(round => {
-      return round.gameId === game.id;
-    });
+    return this.roundService.getRoundsForGame(game.id);
   }
 }

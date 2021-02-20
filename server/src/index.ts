@@ -7,13 +7,13 @@ import { Container } from "typedi";
 import cors from "cors";
 
 import GameResolver from "./graphql/resolvers/GameResolver";
-// import RoundResolver from "./graphql/resolvers/RoundResolver";
+import RoundResolver from "./graphql/resolvers/RoundResolver";
 // import MoveResolver from "./graphql/resolvers/MoveResolver";
 
 
 async function bootstrap() {
   const schema = await buildSchema({
-    resolvers: [GameResolver],
+    resolvers: [GameResolver, RoundResolver],
     emitSchemaFile: true,
     container: Container
   });

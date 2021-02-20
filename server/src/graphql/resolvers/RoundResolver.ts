@@ -1,45 +1,39 @@
 import { Arg, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql";
-import { games, rounds, moves } from "../../data/data";
+import { Service } from "typedi";
+
+import { moves } from "../../data/data";
 import { IRound } from "../../types";
+import { RoundService } from "../../services/RoundService";
+import {GameService} from "../../services/GameService";
 import Round from "../schemas/Round";
 
+
+@Service()
 @Resolver(Round)
 export default class {
+  constructor(
+    private roundService: RoundService,
+    private gameService: GameService,
+  ) {}
+
   @Query(returns => [Round])
   getRounds(): IRound[] {
-    return rounds;
+    return this.roundService.get();
   }
 
   @Query(returns => [Round], { nullable: true })
   getRoundsForGame(@Arg("gameId") gameId: string): IRound[] | undefined {
-    return rounds.filter(round => {
-      return round.gameId === gameId
-    });
+    return this.roundService.getRoundsForGame(gameId);
   }
 
   @Mutation(returns => Round)
-  markAsCompleted(@Arg("roundId") roundId: string, @Arg("playerId") playerId: string): IRound {
-    const round = rounds.find(round => {
-      return round.id === roundId;
-    });
-
-    if (!round) {
-      throw new Error(`Couldn't find the round with id ${roundId}.`);
-    }
-
-    if (round.winner !== "") {
-      throw new Error(`Round with id ${roundId} is already completed.`);
-    }
-
-    round.winner = playerId;
-    return round;
+  markRoundAsCompleted(@Arg("roundId") roundId: string, @Arg("playerId") playerId: string): IRound {
+    return this.roundService.markRoundAsCompleted(roundId, playerId);
   }
 
   @FieldResolver()
   game(@Root() round: IRound) {
-    return games.find(game => {
-      return game.id === round.gameId;
-    });
+    return this.gameService.findOne(round.gameId);
   }
 
   @FieldResolver()
