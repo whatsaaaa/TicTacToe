@@ -3,17 +3,17 @@ import express from "express";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server-express";
 import { configure, format, transports } from "winston";
-import {Container} from "typedi";
+import { Container } from "typedi";
 import cors from "cors";
 
 import GameResolver from "./graphql/resolvers/GameResolver";
-import RoundResolver from "./graphql/resolvers/RoundResolver";
-import MoveResolver from "./graphql/resolvers/MoveResolver";
+// import RoundResolver from "./graphql/resolvers/RoundResolver";
+// import MoveResolver from "./graphql/resolvers/MoveResolver";
 
 
 async function bootstrap() {
   const schema = await buildSchema({
-    resolvers: [GameResolver, RoundResolver, MoveResolver],
+    resolvers: [GameResolver],
     emitSchemaFile: true,
     container: Container
   });

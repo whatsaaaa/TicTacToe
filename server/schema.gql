@@ -3,6 +3,12 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""New game data"""
+input CreateNewGameArgs {
+  name: String!
+  playerId: String!
+}
+
 type Game {
   id: ID!
   name: String!
@@ -19,15 +25,13 @@ type Move {
 }
 
 type Mutation {
-  makeMove: Move!
-  markAsCompleted(playerId: String!, roundId: String!): Round!
+  createNewGame(data: CreateNewGameArgs!): Game!
+  joinGame(gameId: String!, userId: String!): Game!
 }
 
 type Query {
   gameById(id: String!): Game
-  getMoves: [Move!]!
-  getRounds: [Round!]!
-  getRoundsForGame(gameId: String!): [Round!]
+  getGames: [Game!]!
 }
 
 type Round {

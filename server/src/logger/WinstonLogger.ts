@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as winston from "winston";
-import {LogLevel} from "./LogLevel";
+import { LogLevel } from "./LogLevel";
 
 export class WinstonLogger {
   public static DEFAULT_SCOPE = "app";
