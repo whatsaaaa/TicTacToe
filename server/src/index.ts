@@ -2,6 +2,8 @@ import "reflect-metadata";
 import express from "express";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server-express";
+import { configure, format, transports } from "winston";
+import {Container} from "typedi";
 import cors from "cors";
 
 import GameResolver from "./graphql/resolvers/GameResolver";
@@ -12,7 +14,8 @@ import MoveResolver from "./graphql/resolvers/MoveResolver";
 async function bootstrap() {
   const schema = await buildSchema({
     resolvers: [GameResolver, RoundResolver, MoveResolver],
-    emitSchemaFile: true
+    emitSchemaFile: true,
+    container: Container
   });
 
   const app = express();
@@ -30,5 +33,18 @@ async function bootstrap() {
   });
 }
 
+function winstonBuilder() {
+  configure({
+    transports: [
+      new transports.Console({
+        level: "debug",
+        handleExceptions: true,
+        format: format.combine(format.colorize(), format.simple())
+      })
+    ]
+  });
+}
+
+winstonBuilder();
 bootstrap();
 

@@ -1,8 +1,11 @@
 import { Args, ArgsType, FieldResolver, Mutation, Query, Resolver, Root} from "type-graphql";
 import { v4 as uuidv4 } from 'uuid';
+import { Service } from "typedi";
+
 import { moves, rounds } from "../../data/data";
 import { IMove } from "../../types";
 import Move from "../schemas/Move";
+import { Logger, LoggerInterface } from "../../logger/Logger";
 
 @ArgsType()
 class MakeMoveArgs {
@@ -11,10 +14,16 @@ class MakeMoveArgs {
   playerMove: number[];
 }
 
+@Service()
 @Resolver(Move)
 export default class {
+
+  constructor(@Logger(__filename) private log: LoggerInterface) {
+  }
+
   @Query(returns => [Move])
   getMoves(): IMove[] {
+    this.log.info("Executing GraphQl Query [getMoves]");
     return moves;
   }
 
