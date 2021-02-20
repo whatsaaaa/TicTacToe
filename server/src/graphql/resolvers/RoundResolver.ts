@@ -32,6 +32,11 @@ export default class {
     return this.roundService.markRoundAsCompleted(roundId, playerId);
   }
 
+  @Mutation(returns => Round)
+  startNewRound(@Arg("gameId") gameId: string): IRound {
+    return this.roundService.startNewRound(gameId);
+  }
+
   @FieldResolver()
   game(@Root() round: IRound) {
     return this.gameService.findOne(round.gameId);

@@ -29,6 +29,7 @@ type Mutation {
   joinGame(gameId: String!, userId: String!): Game!
   makeMove(playerId: String!, playerMove: [Float!]!, roundId: String!): Move!
   markRoundAsCompleted(playerId: String!, roundId: String!): Round!
+  startNewRound(gameId: String!): Round!
 }
 
 type Query {
