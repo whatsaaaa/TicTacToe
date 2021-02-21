@@ -46,3 +46,7 @@ type Round {
   moves: [Move!]!
   winner: String!
 }
+
+type Subscription {
+  subscription: String!
+}

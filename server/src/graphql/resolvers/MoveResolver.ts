@@ -1,4 +1,5 @@
-import { Arg, Args, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql";
+import { Arg, Args, FieldResolver, Mutation, Query, Resolver, Root, PubSub } from "type-graphql";
+import { PubSubEngine } from "graphql-subscriptions";
 import { Service } from "typedi";
 
 import { IMove } from "../../types";
@@ -21,8 +22,10 @@ export default class {
   }
 
   @Mutation(returns => Move)
-  makeMove(@Args() { playerId, playerMove, roundId }: MakeMoveArgs): IMove {
-    return this.moveService.makeMove(playerId, playerMove, roundId);
+  async makeMove(@Args() { playerId, playerMove, roundId }: MakeMoveArgs, @PubSub() pubSub: PubSubEngine): Promise<IMove> {
+    const newMove = this.moveService.makeMove(playerId, playerMove, roundId);
+    await pubSub.publish("NEW_MOVE", newMove);
+    return newMove;
   }
 
   @FieldResolver()
