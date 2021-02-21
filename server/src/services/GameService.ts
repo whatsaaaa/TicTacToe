@@ -34,7 +34,7 @@ export class GameService {
   public joinGame(gameId: string, userId: string): IGame {
     this.log.info(`User [${userId}] joining game [${gameId}]`);
     const game = games.find(game => {
-      return game.id === gameId
+      return game.id == gameId
     });
 
     if (!game) {
@@ -44,6 +44,45 @@ export class GameService {
 
     this.log.info(`User [${userId}] successfully joined game [${gameId}]`);
     return game;
+  }
+
+  public getGameType(gameId: string): string {
+    this.log.info(`Get game type for game: ${gameId}`);
+    const game = games.find(game => {
+      return game.id == gameId;
+    });
+
+    if (!game) {
+      this.log.warn("Failed to find game");
+      throw new Error("GameNotFound");
+    }
+
+    return game.type;
+  }
+
+  public markGameAsWon(gameId: string, winner: string): void {
+    this.log.info(`Player ${winner} won the game ${gameId}`);
+    const game = games.find(game => {
+      return game.id == gameId;
+    });
+
+    if (!game) {
+      throw new Error("GameNotFound");
+    }
+
+    game.winner = winner;
+  }
+
+  public isGameCompleted(gameId: string): boolean {
+    const game = games.find(game => {
+      return game.id == gameId;
+    });
+
+    if (!game) {
+      throw new Error("GameNotFound");
+    }
+
+    return game.winner != "";
   }
 
   private validateGameType(gameType: string): string {

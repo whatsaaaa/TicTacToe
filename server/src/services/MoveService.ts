@@ -3,21 +3,23 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Logger, LoggerInterface } from "../logger/Logger";
 import { TicTacToeService } from "./TicTacToeService";
+import { GameService } from "./GameService";
 import { moves } from "../data/data";
-import { IMove } from "../types";
+import { IMove, GameType } from "../types";
 
 @Service()
 export class MoveService {
   constructor(
     @Logger(__filename) private log: LoggerInterface,
-    private ticTacToeService: TicTacToeService
+    private ticTacToeService: TicTacToeService,
+    private gameService: GameService
   ) {}
 
   private board = [
     ['', '', ''],
     ['', '', ''],
     ['', '', '']
-  ]
+  ];
 
   private currentPlayer: string = "X";
 
@@ -29,6 +31,11 @@ export class MoveService {
   }
 
   public makeMove(playerId: string, playerMove: number[], gameId: string): IMove {
+    if (this.gameService.isGameCompleted(gameId)) {
+      this.log.warn("Game already completed");
+      throw new Error("GameAlreadyCompleted");
+    }
+
     if (!this.ticTacToeService.isMoveValid(playerMove)) {
       this.log.warn("Invalid move");
       throw new Error("InvalidMove");
@@ -59,11 +66,13 @@ export class MoveService {
     moves.push(newMove);
 
     if (this.ticTacToeService.checkIfGameIsWon(this.board)) {
-      this.log.info("Game won");
+      this.gameService.markGameAsWon(gameId, this.currentPlayer);
     } else {
-      this.log.info("Keep playing");
+      const gameType = this.gameService.getGameType(gameId);
+      if (gameType == GameType.SinglePlayer) {
+        this.log.info(`Bot on move`);
+      }
     }
-
     return newMove;
   }
 
