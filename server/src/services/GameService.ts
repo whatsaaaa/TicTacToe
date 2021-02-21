@@ -1,9 +1,9 @@
-import {Service} from "typedi";
-import {v4 as uuidv4} from "uuid";
+import { Service } from "typedi";
+import { v4 as uuidv4 } from "uuid";
 
-import {Logger, LoggerInterface} from "../logger/Logger";
-import {games} from "../data/data";
-import {GameType, IGame} from "../types";
+import { Logger, LoggerInterface } from "../logger/Logger";
+import { games } from "../data/data";
+import { GameType, IGame } from "../types";
 
 @Service()
 export class GameService {
