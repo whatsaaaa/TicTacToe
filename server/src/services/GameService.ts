@@ -60,7 +60,7 @@ export class GameService {
     return game.type;
   }
 
-  public markGameAsWon(gameId: string, winner: string): void {
+  public markGameAsCompleted(gameId: string, winner: string): void {
     this.log.info(`Player ${winner} won the game ${gameId}`);
     const game = games.find(game => {
       return game.id == gameId;

@@ -22,44 +22,48 @@ export class TicTacToeService {
     return cell == "";
   }
 
-  public checkIfGameIsWon(board: string[][]): boolean {
+  public checkIfGameIsWon(board: string[][]): string | null {
     this.log.info("Checking if game met any of the win conditions");
-    if (this.handleHorizontalWins(board)) return true;
-    if (this.handleVerticalWins(board)) return true;
-    if (this.handleDiagonalWins(board)) return true;
-    return false;
-  }
 
-  private handleHorizontalWins(board: string[][]): boolean {
-    this.log.info("Checking for horizontal wins...");
+    let winner = null;
+
     for (let i = 0; i < 3; i++) {
+      // Horizontal Wins
       if (this.checkEquality(board[i][0], board[i][1], board[i][2])) {
-        return true;
+        winner = board[i][0];
       }
     }
-    return false;
-  }
 
-  private handleVerticalWins(board: string[][]): boolean {
-    this.log.info("Checking for vertical wins...");
     for (let i = 0; i < 3; i++) {
+      // Vertical Wins
       if (this.checkEquality(board[0][i], board[1][i], board[2][i])) {
-        return true;
+        winner = board[0][i];
       }
     }
-    return false;
-  }
 
-  private handleDiagonalWins(board: string[][]): boolean {
-    this.log.info("Checking for diagonal wins...");
+    // Diagonal wins
     if (this.checkEquality(board[0][0], board[1][1], board[2][2])) {
-      return true;
+      winner = board[0][0];
     }
 
     if (this.checkEquality(board[2][0], board[1][1], board[0][2])) {
-      return true;
+      winner = board[2][0];
     }
-    return false;
+
+    let freeSpots = 0;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] == '') {
+          freeSpots++;
+        }
+      }
+    }
+
+    if (winner == null && freeSpots == 0) {
+      return "draw";
+    } else {
+      return winner;
+    }
   }
 
   private checkEquality(a: string, b: string, c: string) {
