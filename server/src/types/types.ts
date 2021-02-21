@@ -1,8 +1,6 @@
 export interface IGame {
   id: string;
   name: string;
-  playerOneId: string;
-  playerTwoId: string;
   winner: string;
   type: string;
 }
@@ -11,7 +9,8 @@ export interface IMove {
   id: string;
   gameId: string;
   move: number[];
-  playerId: string;
+  board: string[][];
+  player: string;
 }
 
 export enum GameType {

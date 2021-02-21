@@ -26,8 +26,8 @@ export default class {
   }
 
   @Mutation(returns => Game)
-  joinGame(@Arg("gameId") gameId: string, @Arg("userId") userId: string) : IGame {
-    return this.gameService.joinGame(gameId, userId);
+  joinGame(@Arg("gameId") gameId: string, @Arg("playerId") playerId: string) : IGame {
+    return this.gameService.joinGame(gameId, playerId);
   }
 
   @FieldResolver()

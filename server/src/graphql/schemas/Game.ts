@@ -10,12 +10,6 @@ export default class Game {
   name: string;
 
   @Field()
-  playerOneId: string;
-
-  @Field()
-  playerTwoId: string;
-
-  @Field()
   type: string;
 
   @Field()

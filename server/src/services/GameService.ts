@@ -23,9 +23,7 @@ export class GameService {
     const newGame: IGame = {
       id: uuidv4(),
       name: name,
-      playerOneId: userId,
       type: type,
-      playerTwoId: "",
       winner: ""
     }
 
@@ -43,13 +41,6 @@ export class GameService {
       this.log.error(`Couldn't find the game with id ${gameId}`);
       throw new Error("GameNotFound");
     }
-
-    if (game.playerTwoId !== "") {
-      this.log.error(`Couldn't join a full game`);
-      throw new Error("GameIsFull");
-    }
-
-    game.playerTwoId = userId;
 
     this.log.info(`User [${userId}] successfully joined game [${gameId}]`);
     return game;

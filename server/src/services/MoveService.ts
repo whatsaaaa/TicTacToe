@@ -11,6 +11,14 @@ export class MoveService {
     @Logger(__filename) private log: LoggerInterface
   ) {}
 
+  private board = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
+  ]
+
+  private currentPlayer: string = "X";
+
   public getMovesForGame(gameId: string): IMove[] {
     this.log.info(`Get moves for game: ${gameId}`);
     return moves.filter(move => {
@@ -19,15 +27,63 @@ export class MoveService {
   }
 
   public makeMove(playerId: string, playerMove: number[], gameId: string): IMove {
-    this.log.info(`Player: ${playerId} making move: ${playerMove}`);
+    if (!this.isMoveValid(playerMove)) {
+      this.log.warn("Invalid move");
+      throw new Error("InvalidMove");
+    }
+
+    const lastMove = this.getLastMove(gameId);
+
+    if (lastMove != null) {
+      this.board = lastMove.board;
+      this.setCurrentPlayer(lastMove.player);
+    }
+
+    if (!this.checkIfFieldIsPlayable(playerMove, this.board)) {
+      this.log.warn("Invalid move. Field is already played.");
+      throw new Error("InvalidMove");
+    }
+
+    this.board[playerMove[0]][playerMove[1]] = this.currentPlayer;
+
     const newMove: IMove = {
       id: uuidv4(),
-      playerId: playerId,
       gameId: gameId,
-      move: playerMove
+      player: this.currentPlayer,
+      move: playerMove,
+      board: this.board
     }
 
     moves.push(newMove);
     return newMove;
+  }
+
+  private getLastMove(gameId: string): IMove {
+    const allMoves = moves.filter(move => {
+      return move.gameId === gameId;
+    });
+
+    return allMoves[allMoves.length - 1];
+  }
+
+  private isMoveValid(move: number[]): boolean {
+    if (move[0] < 0 || move[0] > 2) return false;
+    if (move[1] < 0 || move[1] > 2) return false;
+    return true;
+  }
+
+  private checkIfFieldIsPlayable(move: number[], board: string[][]): boolean {
+    this.log.info(`Checking if move is valid`);
+    const row = board[move[0]];
+    const cell = row[move[1]];
+    return cell == "";
+  }
+
+  private setCurrentPlayer(lastMovePlayer: string): void {
+    if (lastMovePlayer == "X") {
+      this.currentPlayer = "O";
+    } else {
+      this.currentPlayer = "X";
+    }
   }
 }

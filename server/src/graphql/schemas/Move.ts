@@ -8,10 +8,13 @@ export default class Move {
   id: string;
 
   @Field()
-  playerId: string;
+  player: string;
 
   @Field(type => [Number])
   move: number[];
+
+  @Field(type => [[String]])
+  board: string[][];
 
   @Field(type => Game)
   game: Game;
