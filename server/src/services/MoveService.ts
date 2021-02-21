@@ -5,7 +5,7 @@ import { TicTacToeService } from "./TicTacToeService";
 import { GameService } from "./GameService";
 import { BotService } from "./BotService";
 import { moves } from "../data/data";
-import { IMove, GameType } from "../types";
+import { GameType, IMove } from "../types";
 
 @Service()
 export class MoveService {
@@ -33,18 +33,11 @@ export class MoveService {
   }
 
   public makeMove(playerId: string, playerMove: number[], gameId: string): IMove {
-    if (this.gameService.isGameCompleted(gameId)) {
-      this.log.warn("Game already completed");
-      throw new Error("GameAlreadyCompleted");
-    }
-
-    if (!this.ticTacToeService.isMoveValid(playerMove)) {
-      this.log.warn("Invalid move");
-      throw new Error("InvalidMove");
-    }
+    this.validateGameMove(gameId, playerMove);
 
     const lastMove = this.getLastMove(gameId);
 
+    // If it's not the first move of the game
     if (lastMove != null) {
       this.board = JSON.parse(JSON.stringify(lastMove.board));
       this.index = lastMove.index;
@@ -70,42 +63,53 @@ export class MoveService {
 
     moves.push(newMove);
 
-    const result = this.ticTacToeService.checkIfGameIsWon(this.board);
+    this.markGameAsCompletedIfWinConditionIsMet(gameId);
 
-    this.log.info("Result: ", result);
+    const gameType = this.gameService.getGameType(gameId);
+
+    if (gameType == GameType.SinglePlayer) {
+      return this.handleComputerMove(gameId);
+    }
+
+    return newMove;
+  }
+
+  private validateGameMove(gameId: string, playerMove: number[]): void {
+    if (this.gameService.isGameCompleted(gameId)) {
+      this.log.warn("Game already completed");
+      throw new Error("GameAlreadyCompleted");
+    }
+
+    if (!this.ticTacToeService.isMoveValid(playerMove)) {
+      this.log.warn("Invalid move");
+      throw new Error("InvalidMove");
+    }
+  }
+
+  private markGameAsCompletedIfWinConditionIsMet(gameId: string): void {
+    const result = this.ticTacToeService.checkIfGameIsWon(this.board);
 
     if (result != null) {
       this.gameService.markGameAsCompleted(gameId, result);
-      return newMove;
-    }
-    else {
-      const gameType = this.gameService.getGameType(gameId);
-
-      if (gameType == GameType.SinglePlayer) {
-        this.setCurrentPlayer(this.currentPlayer);
-        const computerMove = this.handleComputerMove();
-        const result = this.ticTacToeService.checkIfGameIsWon(this.board);
-        const newMove = this.saveComputerMove(gameId, computerMove);
-
-        if (result != null) {
-          this.gameService.markGameAsCompleted(gameId, result);
-        }
-
-        return newMove;
-      } else {
-        return newMove;
-      }
     }
   }
 
-  public handleComputerMove(): number[] {
-    this.log.info(`Computer on a move as: ${this.currentPlayer}`);
+  private handleComputerMove(gameId: string): IMove {
+    this.setCurrentPlayer(this.currentPlayer);
+
     const computerMove = this.botService.botMove(this.board);
+
+    this.board = JSON.parse(JSON.stringify(this.board));
     this.board[computerMove[0]][computerMove[1]] = this.currentPlayer;
-    return computerMove;
+
+    const savedComputerMove = this.saveComputerMove(gameId, computerMove);
+
+    this.markGameAsCompletedIfWinConditionIsMet(gameId);
+
+    return savedComputerMove;
   }
 
-  public saveComputerMove(gameId: string, computerMove: number[]): IMove {
+  private saveComputerMove(gameId: string, computerMove: number[]): IMove {
     const move: IMove = {
       index: ++this.index,
       gameId: gameId,
