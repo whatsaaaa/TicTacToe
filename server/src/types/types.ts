@@ -6,7 +6,7 @@ export interface IGame {
 }
 
 export interface IMove {
-  id: string;
+  index: number;
   gameId: string;
   move: number[];
   board: string[][];

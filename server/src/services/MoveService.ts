@@ -1,5 +1,4 @@
 import { Service } from "typedi";
-import { v4 as uuidv4 } from "uuid";
 
 import { Logger, LoggerInterface } from "../logger/Logger";
 import { TicTacToeService } from "./TicTacToeService";
@@ -22,6 +21,7 @@ export class MoveService {
   ];
 
   private currentPlayer: string = "X";
+  private index: number = 0;
 
   public getMovesForGame(gameId: string): IMove[] {
     this.log.info(`Get moves for game: ${gameId}`);
@@ -45,6 +45,7 @@ export class MoveService {
 
     if (lastMove != null) {
       this.board = lastMove.board;
+      this.index = lastMove.index;
       this.setCurrentPlayer(lastMove.player);
     }
 
@@ -56,7 +57,7 @@ export class MoveService {
     this.board[playerMove[0]][playerMove[1]] = this.currentPlayer;
 
     const newMove: IMove = {
-      id: uuidv4(),
+      index: ++this.index,
       gameId: gameId,
       player: this.currentPlayer,
       move: playerMove,

@@ -4,8 +4,8 @@ import Game from "./Game";
 
 @ObjectType()
 export default class Move {
-  @Field(type => ID)
-  id: string;
+  @Field()
+  index: number;
 
   @Field()
   player: string;
