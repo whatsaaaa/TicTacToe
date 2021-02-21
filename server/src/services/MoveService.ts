@@ -95,18 +95,31 @@ export class MoveService {
   }
 
   private checkIfGameIsWon(): boolean {
+    if (this.handleHorizontalWins()) return true;
+    if (this.handleVerticalWins()) return true;
+    if (this.handleDiagonalWins()) return true;
+    return false;
+  }
+
+  private handleHorizontalWins(): boolean {
     for (let i = 0; i < 3; i++) {
       if (this.checkEquality(this.board[i][0], this.board[i][1], this.board[i][2])) {
         return true;
       }
     }
+    return false;
+  }
 
+  private handleVerticalWins(): boolean {
     for (let i = 0; i < 3; i++) {
       if (this.checkEquality(this.board[0][i], this.board[1][i], this.board[2][i])) {
         return true;
       }
     }
+    return false;
+  }
 
+  private handleDiagonalWins(): boolean {
     if (this.checkEquality(this.board[0][0], this.board[1][1], this.board[2][2])) {
       return true;
     }
@@ -114,7 +127,6 @@ export class MoveService {
     if (this.checkEquality(this.board[2][0], this.board[1][1], this.board[0][2])) {
       return true;
     }
-
     return false;
   }
 
