@@ -11,19 +11,19 @@ export class MoveService {
     @Logger(__filename) private log: LoggerInterface
   ) {}
 
-  public getMovesForRound(roundId: string): IMove[] {
-    this.log.info(`Get moves for round: ${roundId}`);
+  public getMovesForGame(gameId: string): IMove[] {
+    this.log.info(`Get moves for game: ${gameId}`);
     return moves.filter(move => {
-      return move.roundId === roundId;
+      return move.gameId === gameId;
     });
   }
 
-  public makeMove(playerId: string, playerMove: number[], roundId: string): IMove {
+  public makeMove(playerId: string, playerMove: number[], gameId: string): IMove {
     this.log.info(`Player: ${playerId} making move: ${playerMove}`);
     const newMove: IMove = {
       id: uuidv4(),
       playerId: playerId,
-      roundId: roundId,
+      gameId: gameId,
       move: playerMove
     }
 

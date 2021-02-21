@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import Round from "./Round";
+
+import Game from "./Game";
 
 @ObjectType()
 export default class Move {
@@ -12,6 +13,6 @@ export default class Move {
   @Field(type => [Number])
   move: number[];
 
-  @Field(type => Round)
-  round: Round;
+  @Field(type => Game)
+  game: Game;
 }

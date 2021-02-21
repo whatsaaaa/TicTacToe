@@ -11,40 +11,28 @@ input CreateNewGameArgs {
 
 type Game {
   id: ID!
+  moves: [Move!]!
   name: String!
   playerOneId: String!
   playerTwoId: String!
-  rounds: [Round!]!
+  winner: String!
 }
 
 type Move {
+  game: Game!
   id: ID!
   move: [Float!]!
   playerId: String!
-  round: Round!
 }
 
 type Mutation {
   createNewGame(data: CreateNewGameArgs!): Game!
   joinGame(gameId: String!, userId: String!): Game!
   makeMove(playerId: String!, playerMove: [Float!]!, roundId: String!): Move!
-  markRoundAsCompleted(playerId: String!, roundId: String!): Round!
-  startNewRound(gameId: String!): Round!
 }
 
 type Query {
   getGameById(id: String!): Game
-  getGames: [Game!]!
-  getMovesForRound(roundId: String!): [Move!]!
-  getRounds: [Round!]!
-  getRoundsForGame(gameId: String!): [Round!]
-}
-
-type Round {
-  game: Game!
-  id: ID!
-  moves: [Move!]!
-  winner: String!
 }
 
 type Subscription {

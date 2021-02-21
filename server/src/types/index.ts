@@ -1,1 +1,1 @@
-export { IGame, IRound, IMove } from "./types";
+export { IGame, IMove } from "./types";

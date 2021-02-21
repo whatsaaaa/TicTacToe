@@ -3,17 +3,12 @@ export interface IGame {
   name: string;
   playerOneId: string;
   playerTwoId: string;
-}
-
-export interface IRound {
-  id: string;
   winner: string;
-  gameId: string;
 }
 
 export interface IMove {
   id: string;
-  playerId: string;
+  gameId: string;
   move: number[];
-  roundId: string;
+  playerId: string;
 }

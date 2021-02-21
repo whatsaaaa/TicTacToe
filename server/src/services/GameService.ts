@@ -27,7 +27,8 @@ export class GameService {
       id: uuidv4(),
       name: name,
       playerOneId: userId,
-      playerTwoId: ""
+      playerTwoId: "",
+      winner: ""
     }
 
     games.push(newGame);

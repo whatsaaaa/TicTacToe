@@ -3,7 +3,7 @@ import { Service } from "typedi";
 
 import { IGame } from "../../types";
 import { GameService } from "../../services/GameService";
-import { RoundService } from "../../services/RoundService";
+import { MoveService } from "../../services/MoveService";
 import { CreateNewGameArgs } from "../args";
 import Game from "../schemas/Game";
 
@@ -12,13 +12,8 @@ import Game from "../schemas/Game";
 export default class {
   constructor(
     private gameService: GameService,
-    private roundService: RoundService
+    private moveService: MoveService
   ) {}
-
-  @Query(returns => [Game])
-  getGames(): IGame[] {
-    return this.gameService.get();
-  }
 
   @Query(returns => Game, { nullable: true })
   getGameById(@Arg("id") id: string): IGame | undefined {
@@ -36,7 +31,7 @@ export default class {
   }
 
   @FieldResolver()
-  rounds(@Root() game: IGame) {
-    return this.roundService.getRoundsForGame(game.id);
+  moves(@Root() game: IGame) {
+    return this.moveService.getMovesForGame(game.id);
   }
 }

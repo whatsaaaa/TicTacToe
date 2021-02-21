@@ -8,14 +8,13 @@ import cors from "cors";
 import http from "http";
 
 import GameResolver from "./graphql/resolvers/GameResolver";
-import RoundResolver from "./graphql/resolvers/RoundResolver";
 import MoveResolver from "./graphql/resolvers/MoveResolver";
 import SubscriptionResolver from "./graphql/resolvers/SubscriptionResolver";
 
 
 async function bootstrap() {
   const schema = await buildSchema({
-    resolvers: [GameResolver, RoundResolver, MoveResolver, SubscriptionResolver],
+    resolvers: [GameResolver, MoveResolver, SubscriptionResolver],
     emitSchemaFile: true,
     container: Container
   });
