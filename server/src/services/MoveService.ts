@@ -55,6 +55,13 @@ export class MoveService {
     }
 
     moves.push(newMove);
+
+    if (this.checkIfGameIsWon()) {
+      this.log.info("Game won");
+    } else {
+      this.log.info("Keep playing");
+    }
+
     return newMove;
   }
 
@@ -85,5 +92,33 @@ export class MoveService {
     } else {
       this.currentPlayer = "X";
     }
+  }
+
+  private checkIfGameIsWon(): boolean {
+    for (let i = 0; i < 3; i++) {
+      if (this.checkEquality(this.board[i][0], this.board[i][1], this.board[i][2])) {
+        return true;
+      }
+    }
+
+    for (let i = 0; i < 3; i++) {
+      if (this.checkEquality(this.board[0][i], this.board[1][i], this.board[2][i])) {
+        return true;
+      }
+    }
+
+    if (this.checkEquality(this.board[0][0], this.board[1][1], this.board[2][2])) {
+      return true;
+    }
+
+    if (this.checkEquality(this.board[2][0], this.board[1][1], this.board[0][2])) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private checkEquality(a: string, b: string, c: string) {
+    return a == b && b == c && a != "";
   }
 }
