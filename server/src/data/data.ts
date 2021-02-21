@@ -1,4 +1,4 @@
-import { IGame, IMove } from "../types";
+import {GameType, IGame, IMove} from "../types";
 
 export const games: IGame[] = [
   {
@@ -6,7 +6,8 @@ export const games: IGame[] = [
     name: "Game 1",
     playerOneId: "a3259e7c-5462-407a-9dfc-554a7549a799",
     playerTwoId: "316d5155-107c-41b0-a97b-9ab46c0780b0",
-    winner: ""
+    winner: "",
+    type: GameType.MultiPlayer
   }
 ]
 

@@ -4,6 +4,7 @@ export interface IGame {
   playerOneId: string;
   playerTwoId: string;
   winner: string;
+  type: string;
 }
 
 export interface IMove {
@@ -11,4 +12,9 @@ export interface IMove {
   gameId: string;
   move: number[];
   playerId: string;
+}
+
+export enum GameType {
+  SinglePlayer = "singleplayer",
+  MultiPlayer = "multiplayer"
 }

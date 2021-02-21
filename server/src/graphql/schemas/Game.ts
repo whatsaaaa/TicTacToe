@@ -16,6 +16,9 @@ export default class Game {
   playerTwoId: string;
 
   @Field()
+  type: string;
+
+  @Field()
   winner: string;
 
   @Field(type => [Move])

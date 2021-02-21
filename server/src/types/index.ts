@@ -1,1 +1,1 @@
-export { IGame, IMove } from "./types";
+export { IGame, IMove, GameType } from "./types";

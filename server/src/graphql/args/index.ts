@@ -1,12 +1,15 @@
-import { ArgsType, Field, InputType } from "type-graphql";
+import { ArgsType, Field } from "type-graphql";
 
-@InputType({ description: "New game data" })
+@ArgsType()
 export class CreateNewGameArgs {
   @Field()
   name: string;
 
   @Field()
   playerId: string;
+
+  @Field()
+  gameType: string;
 }
 
 @ArgsType()

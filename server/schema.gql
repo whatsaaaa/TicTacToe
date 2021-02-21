@@ -3,18 +3,13 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-"""New game data"""
-input CreateNewGameArgs {
-  name: String!
-  playerId: String!
-}
-
 type Game {
   id: ID!
   moves: [Move!]!
   name: String!
   playerOneId: String!
   playerTwoId: String!
+  type: String!
   winner: String!
 }
 
@@ -26,7 +21,7 @@ type Move {
 }
 
 type Mutation {
-  createNewGame(data: CreateNewGameArgs!): Game!
+  createNewGame(gameType: String!, name: String!, playerId: String!): Game!
   joinGame(gameId: String!, userId: String!): Game!
   makeMove(playerId: String!, playerMove: [Float!]!, roundId: String!): Move!
 }

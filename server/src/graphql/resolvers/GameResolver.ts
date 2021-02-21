@@ -1,4 +1,4 @@
-import { Arg, FieldResolver, Query, Resolver, Root, Mutation } from "type-graphql";
+import { Arg, Args, FieldResolver, Query, Resolver, Root, Mutation } from "type-graphql";
 import { Service } from "typedi";
 
 import { IGame } from "../../types";
@@ -21,8 +21,8 @@ export default class {
   }
 
   @Mutation(returns => Game)
-  createNewGame(@Arg("data") newGame: CreateNewGameArgs): IGame {
-    return this.gameService.createNewGame(newGame.name, newGame.playerId);
+  createNewGame(@Args() { name, gameType, playerId }: CreateNewGameArgs ): IGame {
+    return this.gameService.createNewGame(name, playerId, gameType);
   }
 
   @Mutation(returns => Game)
