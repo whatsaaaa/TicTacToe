@@ -26,7 +26,7 @@ NodeJs application for Tic-Tac-Toe game.
     yarn dev
     ```
   
-    App listening on: http://localhost:8000/graphql
+    Playground: http://localhost:8000/graphql
   
 ## Features
 
