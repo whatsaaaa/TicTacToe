@@ -10,20 +10,20 @@ export class BotService {
     private ticTacToeService: TicTacToeService
   ) {}
 
-  private computerPlayer: string = "O";
-  private humanPlayer: string = "X";
+  private computerPlayer = "O";
+  private humanPlayer = "X";
 
   public botMove(board: string[][]): number[] {
     this.log.info(`Current board: ${JSON.stringify(board)}`);
 
-    let bestScore: number = -Infinity;
+    let bestScore = -Infinity;
     let bestMove: number[] = [];
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] == "") {
           board[i][j] = this.computerPlayer;
-          let score = this.minimax(board, 0, true);
+          const score = this.minimax(board, 0, true);
           board[i][j] = "";
 
           if (score > bestScore) {
@@ -52,7 +52,7 @@ export class BotService {
         for (let j = 0; j < 3; j++) {
           if (board[i][j] == "") {
             board[i][j] = this.humanPlayer;
-            let score = this.minimax(board, depth + 1, false);
+            const score = this.minimax(board, depth + 1, false);
             board[i][j] = "";
             if (score < bestScore) {
               bestScore = score;
@@ -67,7 +67,7 @@ export class BotService {
         for (let j = 0; j < 3; j++) {
           if (board[i][j] == "") {
             board[i][j] = this.computerPlayer;
-            let score = this.minimax(board, depth + 1, true);
+            const score = this.minimax(board, depth + 1, true);
             board[i][j] = "";
             if (score > bestScore) {
               bestScore = score;

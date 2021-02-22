@@ -22,8 +22,8 @@ export class MoveService {
     ['', '', '']
   ];
 
-  private currentPlayer: string = "X";
-  private index: number = 0;
+  private currentPlayer = "X";
+  private index = 0;
 
   public getMovesForGame(gameId: string): IMove[] {
     this.log.info(`Get moves for game: ${gameId}`);
@@ -53,7 +53,7 @@ export class MoveService {
 
     this.board[playerMove[0]][playerMove[1]] = this.currentPlayer;
 
-    let newMove: IMove = {
+    const newMove: IMove = {
       index: ++this.index,
       gameId: gameId,
       player: this.currentPlayer,
