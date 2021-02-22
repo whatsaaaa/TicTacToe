@@ -1,6 +1,6 @@
 import lowdb from "lowdb";
 import { default as FileSync } from "lowdb/adapters/FileSync";
-import {Service} from "typedi";
+import { Service } from "typedi";
 
 @Service()
 export class DbService {
