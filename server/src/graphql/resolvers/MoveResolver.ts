@@ -17,8 +17,8 @@ export default class {
   ) {}
 
   @Mutation(returns => Move)
-  async makeMove(@Args() { playerId, playerMove, roundId }: MakeMoveArgs, @PubSub() pubSub: PubSubEngine): Promise<IMove> {
-    const newMove = this.moveService.makeMove(playerId, playerMove, roundId);
+  async makeMove(@Args() { gameId, playerMove }: MakeMoveArgs, @PubSub() pubSub: PubSubEngine): Promise<IMove> {
+    const newMove = this.moveService.makeMove(gameId, playerMove);
 
     const game = this.gameService.findOne(newMove.gameId);
 

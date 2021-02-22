@@ -18,16 +18,21 @@ export class GameService {
     return this._gameRepository.findOne(id);
   }
 
-  public createNewGame(name: string, userId: string, gameType: string): IGame {
+  public createNewGame(username: string, gameType: string): IGame {
     this.log.info("Create new game");
 
     const type = this.validateGameType(gameType);
 
     const newGame: IGame = {
       id: uuidv4(),
-      name: name,
+      playerX: username,
       type: type,
+      playerO: "",
       winner: ""
+    }
+
+    if (type == GameType.SinglePlayer) {
+      newGame.playerO = "ComputerAi";
     }
 
     this._gameRepository.create(newGame);
@@ -35,8 +40,8 @@ export class GameService {
     return newGame;
   }
 
-  public joinGame(gameId: string, userId: string): IGame {
-    this.log.info(`User [${userId}] joining game [${gameId}]`);
+  public joinGame(gameId: string, username: string): IGame {
+    this.log.info(`User [${username}] joining game [${gameId}]`);
 
     const game = this._gameRepository.findOne(gameId);
 
@@ -45,7 +50,16 @@ export class GameService {
       throw new Error("GameNotFound");
     }
 
-    this.log.info(`User [${userId}] successfully joined game [${gameId}]`);
+    if (game.playerO != "") {
+      this.log.warn(`Game ${gameId} already full`);
+      throw new Error("GameIsFull");
+    }
+
+    game.playerO = username;
+
+    this._gameRepository.update(gameId, game);
+
+    this.log.info(`User [${username}] successfully joined game [${gameId}]`);
     return game;
   }
 
@@ -72,6 +86,8 @@ export class GameService {
     }
 
     game.winner = winner;
+
+    this._gameRepository.update(gameId, game);
   }
 
   public isGameCompleted(gameId: string): boolean {
@@ -82,6 +98,16 @@ export class GameService {
     }
 
     return game.winner != "";
+  }
+
+  public isGameStarted(gameId: string): boolean {
+    const game = this._gameRepository.findOne(gameId);
+
+    if (!game) {
+      throw new Error("GameNotFound");
+    }
+
+    return game.playerX != "" && game.playerO != "";
   }
 
   private validateGameType(gameType: string): string {

@@ -32,16 +32,23 @@ export class MoveService {
     return this._moveRepository.getMovesForGame(gameId);
   }
 
-  public makeMove(playerId: string, playerMove: number[], gameId: string): IMove {
+  public makeMove(gameId: string, playerMove: number[]): IMove {
     this.validateGameMove(gameId, playerMove);
 
     const lastMove = this.getLastMove(gameId);
 
     // If it's not the first move of the game
-    if (lastMove != null) {
+    if (lastMove) {
       this.board = JSON.parse(JSON.stringify(lastMove.board));
       this.index = lastMove.index;
       this.setCurrentPlayer(lastMove.player);
+    } else {
+      this.setCurrentPlayer("O");
+      this.board = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+      ];
     }
 
     this.log.info(`Player playing as: ${this.currentPlayer}`);
@@ -69,6 +76,11 @@ export class MoveService {
     if (this.gameService.isGameCompleted(gameId)) {
       this.log.warn("Game already completed");
       throw new Error("GameAlreadyCompleted");
+    }
+
+    if (!this.gameService.isGameStarted(gameId)) {
+      this.log.warn("You can not make moves before both player joins");
+      throw new Error("GameNotStarted");
     }
 
     if (!this.ticTacToeService.isMoveValid(playerMove)) {

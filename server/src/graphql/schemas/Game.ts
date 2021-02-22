@@ -7,7 +7,10 @@ export default class Game {
   id: string;
 
   @Field()
-  name: string;
+  playerX: string;
+
+  @Field()
+  playerO: string;
 
   @Field()
   type: string;

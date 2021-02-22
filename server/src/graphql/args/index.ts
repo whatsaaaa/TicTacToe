@@ -3,10 +3,7 @@ import { ArgsType, Field } from "type-graphql";
 @ArgsType()
 export class CreateNewGameArgs {
   @Field()
-  name: string;
-
-  @Field()
-  playerId: string;
+  username: string;
 
   @Field()
   gameType: string;
@@ -15,10 +12,7 @@ export class CreateNewGameArgs {
 @ArgsType()
 export class MakeMoveArgs {
   @Field()
-  playerId: string;
-
-  @Field()
-  roundId: string;
+  gameId: string;
 
   @Field(type => [Number])
   playerMove: number[];

@@ -6,7 +6,8 @@
 type Game {
   id: ID!
   moves: [Move!]!
-  name: String!
+  playerO: String!
+  playerX: String!
   type: String!
   winner: String!
 }
@@ -20,9 +21,9 @@ type Move {
 }
 
 type Mutation {
-  createNewGame(gameType: String!, name: String!, playerId: String!): Game!
-  joinGame(gameId: String!, playerId: String!): Game!
-  makeMove(playerId: String!, playerMove: [Float!]!, roundId: String!): Move!
+  createNewGame(gameType: String!, username: String!): Game!
+  joinGame(gameId: String!, username: String!): Game!
+  makeMove(gameId: String!, playerMove: [Float!]!): Move!
 }
 
 type Query {

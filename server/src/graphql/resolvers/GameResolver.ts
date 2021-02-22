@@ -21,13 +21,13 @@ export default class {
   }
 
   @Mutation(returns => Game)
-  createNewGame(@Args() { name, gameType, playerId }: CreateNewGameArgs ): IGame {
-    return this.gameService.createNewGame(name, playerId, gameType);
+  createNewGame(@Args() { username, gameType }: CreateNewGameArgs ): IGame {
+    return this.gameService.createNewGame(username, gameType);
   }
 
   @Mutation(returns => Game)
-  joinGame(@Arg("gameId") gameId: string, @Arg("playerId") playerId: string) : IGame {
-    return this.gameService.joinGame(gameId, playerId);
+  joinGame(@Arg("gameId") gameId: string, @Arg("username") username: string) : IGame {
+    return this.gameService.joinGame(gameId, username);
   }
 
   @FieldResolver()

@@ -1,6 +1,7 @@
 export interface IGame {
   id: string;
-  name: string;
+  playerX: string;
+  playerO: string;
   winner: string;
   type: string;
 }
