@@ -49,5 +49,6 @@ function winstonBuilder() {
 }
 
 winstonBuilder();
-bootstrap();
-
+bootstrap()
+  .then(() => console.log("started"))
+  .catch(() => console.log("failed to start"))
