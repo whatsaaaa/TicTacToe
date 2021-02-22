@@ -2,18 +2,20 @@ import { Service } from "typedi";
 import { v4 as uuidv4 } from "uuid";
 
 import { Logger, LoggerInterface } from "../logger/Logger";
-import { games } from "../data/data";
+import { RepositoryResolver } from "../container/RepositoryResolver";
+import { GameRepository } from "../repositories/GameRepository";
 import { GameType, IGame } from "../types";
 
 @Service()
 export class GameService {
   constructor(
-    @Logger(__filename) private log: LoggerInterface
+    @Logger(__filename) private log: LoggerInterface,
+    @RepositoryResolver("games") private _gameRepository: GameRepository
   ) {}
 
   public findOne(id: string): IGame | undefined {
     this.log.info(`Find game with an id: [${id}]`);
-    return games.find(game => game.id === id);
+    return this._gameRepository.findOne(id);
   }
 
   public createNewGame(name: string, userId: string, gameType: string): IGame {
@@ -28,15 +30,15 @@ export class GameService {
       winner: ""
     }
 
-    games.push(newGame);
+    this._gameRepository.create(newGame);
+
     return newGame;
   }
 
   public joinGame(gameId: string, userId: string): IGame {
     this.log.info(`User [${userId}] joining game [${gameId}]`);
-    const game = games.find(game => {
-      return game.id == gameId
-    });
+
+    const game = this._gameRepository.findOne(gameId);
 
     if (!game) {
       this.log.error(`Couldn't find the game with id ${gameId}`);
@@ -49,9 +51,8 @@ export class GameService {
 
   public getGameType(gameId: string): string {
     this.log.info(`Get game type for game: ${gameId}`);
-    const game = games.find(game => {
-      return game.id == gameId;
-    });
+
+    const game = this._gameRepository.findOne(gameId);
 
     if (!game) {
       this.log.warn("Failed to find game");
@@ -63,9 +64,8 @@ export class GameService {
 
   public markGameAsCompleted(gameId: string, winner: string): void {
     this.log.info(`Player ${winner} won the game ${gameId}`);
-    const game = games.find(game => {
-      return game.id == gameId;
-    });
+
+    const game = this._gameRepository.findOne(gameId);
 
     if (!game) {
       throw new Error("GameNotFound");
@@ -75,9 +75,7 @@ export class GameService {
   }
 
   public isGameCompleted(gameId: string): boolean {
-    const game = games.find(game => {
-      return game.id == gameId;
-    });
+    const game = this._gameRepository.findOne(gameId);
 
     if (!game) {
       throw new Error("GameNotFound");

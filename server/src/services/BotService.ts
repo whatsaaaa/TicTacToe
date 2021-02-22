@@ -23,7 +23,7 @@ export class BotService {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] == "") {
           board[i][j] = this.computerPlayer;
-          const score = this.minimax(board, 0, true);
+          const score = this.minimax(board, true);
           board[i][j] = "";
 
           if (score > bestScore) {
@@ -37,7 +37,7 @@ export class BotService {
     return bestMove;
   }
 
-  private minimax(board: string[][], depth: number, isMaximizing: boolean): number {
+  private minimax(board: string[][], isMaximizing: boolean): number {
     const result = this.ticTacToeService.checkIfGameIsWon(board);
 
     if (result != null) {
@@ -52,7 +52,7 @@ export class BotService {
         for (let j = 0; j < 3; j++) {
           if (board[i][j] == "") {
             board[i][j] = this.humanPlayer;
-            const score = this.minimax(board, depth + 1, false);
+            const score = this.minimax(board,false);
             board[i][j] = "";
             if (score < bestScore) {
               bestScore = score;
@@ -67,7 +67,7 @@ export class BotService {
         for (let j = 0; j < 3; j++) {
           if (board[i][j] == "") {
             board[i][j] = this.computerPlayer;
-            const score = this.minimax(board, depth + 1, true);
+            const score = this.minimax(board,true);
             board[i][j] = "";
             if (score > bestScore) {
               bestScore = score;

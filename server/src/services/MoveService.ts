@@ -4,13 +4,15 @@ import { Logger, LoggerInterface } from "../logger/Logger";
 import { TicTacToeService } from "./TicTacToeService";
 import { GameService } from "./GameService";
 import { BotService } from "./BotService";
-import { moves } from "../data/data";
+import { RepositoryResolver } from "../container/RepositoryResolver";
+import { MoveRepository } from "../repositories/MoveRepository";
 import { GameType, IMove } from "../types";
 
 @Service()
 export class MoveService {
   constructor(
     @Logger(__filename) private log: LoggerInterface,
+    @RepositoryResolver("moves") private _moveRepository: MoveRepository,
     private ticTacToeService: TicTacToeService,
     private gameService: GameService,
     private botService: BotService
@@ -27,9 +29,7 @@ export class MoveService {
 
   public getMovesForGame(gameId: string): IMove[] {
     this.log.info(`Get moves for game: ${gameId}`);
-    return moves.filter(move => {
-      return move.gameId === gameId;
-    });
+    return this._moveRepository.getMovesForGame(gameId);
   }
 
   public makeMove(playerId: string, playerMove: number[], gameId: string): IMove {
@@ -53,18 +53,8 @@ export class MoveService {
 
     this.board[playerMove[0]][playerMove[1]] = this.currentPlayer;
 
-    const newMove: IMove = {
-      index: ++this.index,
-      gameId: gameId,
-      player: this.currentPlayer,
-      move: playerMove,
-      board: this.board
-    }
-
-    moves.push(newMove);
-
+    const newMove = this.saveMove(gameId, playerMove);
     const completed = this.markGameAsCompletedIfWinConditionIsMet(gameId);
-
     const gameType = this.gameService.getGameType(gameId);
 
     if (gameType == GameType.SinglePlayer) {
@@ -72,7 +62,6 @@ export class MoveService {
         return this.handleComputerMove(gameId);
       }
     }
-
     return newMove;
   }
 
@@ -107,14 +96,14 @@ export class MoveService {
     this.board = JSON.parse(JSON.stringify(this.board));
     this.board[computerMove[0]][computerMove[1]] = this.currentPlayer;
 
-    const savedComputerMove = this.saveComputerMove(gameId, computerMove);
+    const savedComputerMove = this.saveMove(gameId, computerMove);
 
     this.markGameAsCompletedIfWinConditionIsMet(gameId);
 
     return savedComputerMove;
   }
 
-  private saveComputerMove(gameId: string, computerMove: number[]): IMove {
+  private saveMove(gameId: string, computerMove: number[]): IMove {
     const move: IMove = {
       index: ++this.index,
       gameId: gameId,
@@ -123,11 +112,12 @@ export class MoveService {
       board: this.board
     }
 
-    moves.push(move);
+    this._moveRepository.create(move);
     return move;
   }
 
   private getLastMove(gameId: string): IMove {
+    const moves = this._moveRepository.find();
     const allMoves = moves.filter(move => {
       return move.gameId === gameId;
     });
