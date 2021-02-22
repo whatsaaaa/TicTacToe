@@ -145,4 +145,4 @@ NodeJs application for Tic-Tac-Toe game.
 
 ## AI Moves
 
-AI moves are achieved using very basic implementation of Minimax Algorithm.
+AI moves are achieved with very basic implementation of Minimax Algorithm.
