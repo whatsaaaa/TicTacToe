@@ -79,7 +79,7 @@ export class MoveService {
     }
 
     if (!this.gameService.isGameStarted(gameId)) {
-      this.log.warn("You can not make moves before both player joins");
+      this.log.warn("You can not make moves before both player join the game.");
       throw new Error("GameNotStarted");
     }
 
