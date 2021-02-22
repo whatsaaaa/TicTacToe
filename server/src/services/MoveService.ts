@@ -63,12 +63,14 @@ export class MoveService {
 
     moves.push(newMove);
 
-    this.markGameAsCompletedIfWinConditionIsMet(gameId);
+    const completed = this.markGameAsCompletedIfWinConditionIsMet(gameId);
 
     const gameType = this.gameService.getGameType(gameId);
 
     if (gameType == GameType.SinglePlayer) {
-      return this.handleComputerMove(gameId);
+      if (!completed) {
+        return this.handleComputerMove(gameId);
+      }
     }
 
     return newMove;
@@ -86,12 +88,15 @@ export class MoveService {
     }
   }
 
-  private markGameAsCompletedIfWinConditionIsMet(gameId: string): void {
+  private markGameAsCompletedIfWinConditionIsMet(gameId: string): boolean {
     const result = this.ticTacToeService.checkIfGameIsWon(this.board);
 
     if (result != null) {
       this.gameService.markGameAsCompleted(gameId, result);
+      return true;
     }
+
+    return false;
   }
 
   private handleComputerMove(gameId: string): IMove {

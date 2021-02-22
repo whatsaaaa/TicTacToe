@@ -10,6 +10,7 @@ export class GameService {
   constructor(
     @Logger(__filename) private log: LoggerInterface
   ) {}
+
   public findOne(id: string): IGame | undefined {
     this.log.info(`Find game with an id: [${id}]`);
     return games.find(game => game.id === id);

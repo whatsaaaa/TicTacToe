@@ -19,7 +19,17 @@ export default class {
   @Mutation(returns => Move)
   async makeMove(@Args() { playerId, playerMove, roundId }: MakeMoveArgs, @PubSub() pubSub: PubSubEngine): Promise<IMove> {
     const newMove = this.moveService.makeMove(playerId, playerMove, roundId);
-    await pubSub.publish("NEW_MOVE", newMove);
+
+    const game = this.gameService.findOne(newMove.gameId);
+
+    if (game?.winner != "") {
+      await pubSub.publish("GAME_ENDED", {
+        gameId: newMove.gameId,
+        winner: game?.winner,
+        board: newMove.board,
+      });
+    }
+
     return newMove;
   }
 

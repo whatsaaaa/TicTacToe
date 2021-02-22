@@ -1,14 +1,17 @@
-import { Ctx, Resolver, Subscription } from "type-graphql";
+import { Ctx, Resolver, Subscription, Root } from "type-graphql";
 import { Service } from "typedi"
+
+import { IGameEnded } from "../../types";
 
 @Service()
 @Resolver()
 export default class SubscriptionResolver {
-  @Subscription(() => String, {
-    topics: "NEW_MOVE"
+  @Subscription(type => String, {
+    topics: "GAME_ENDED"
   })
-  async subscription(@Ctx() ctx: any): Promise<any> {
-    console.log("Hello, World from subscription");
-    return "subscription!";
+  async liveResults(@Ctx() ctx: any, @Root() liveResult: IGameEnded): Promise<string> {
+    const winner = liveResult.winner;
+    const text = winner == "draw" ? "draw" : `${winner} won.`;
+    return `Game ${liveResult.gameId} finished. Result is: ${text}. Board: ${JSON.stringify(liveResult.board)}`;
   }
 }

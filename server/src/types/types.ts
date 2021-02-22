@@ -13,6 +13,12 @@ export interface IMove {
   player: string;
 }
 
+export interface IGameEnded {
+  gameId: string;
+  winner: string;
+  board: string;
+}
+
 export enum GameType {
   SinglePlayer = "singleplayer",
   MultiPlayer = "multiplayer"
