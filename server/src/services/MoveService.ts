@@ -43,7 +43,7 @@ export class MoveService {
       this.index = lastMove.index;
       this.setCurrentPlayer(lastMove.player);
     } else {
-      this.setCurrentPlayer("O");
+      this.currentPlayer = "X";
       this.board = [
         ['', '', ''],
         ['', '', ''],
