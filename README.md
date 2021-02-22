@@ -94,7 +94,7 @@ NodeJs application for Tic-Tac-Toe game.
     }
     ```
     
-    This mutation can return next errors: `GameNotFound`, `InvalidMove`, `GameAlreadyCompleted` & `FieldAlreadyPlayed`.
+    This mutation can return next errors: `GameNotFound`, `GameNotStarted`, `InvalidMove`, `GameAlreadyCompleted` & `FieldAlreadyPlayed`.
 
     Valid moves:
 
@@ -104,7 +104,8 @@ NodeJs application for Tic-Tac-Toe game.
        ------------------------------
        [2, 0]  |  [2, 1]  |  [2, 2] |
 
-
+    **NOTE** 
+    In singleplayer mode, after user makes a move, AI will immediately play.
 
 ### Queries
 
