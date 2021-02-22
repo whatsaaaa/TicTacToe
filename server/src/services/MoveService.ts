@@ -55,7 +55,7 @@ export class MoveService {
 
     if (!this.ticTacToeService.checkIfFieldIsPlayable(playerMove, this.board)) {
       this.log.warn("Invalid move. Field is already played.");
-      throw new Error("InvalidMove");
+      throw new Error("FieldAlreadyPlayed");
     }
 
     this.board[playerMove[0]][playerMove[1]] = this.currentPlayer;
