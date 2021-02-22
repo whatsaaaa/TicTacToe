@@ -32,7 +32,7 @@ NodeJs application for Tic-Tac-Toe game.
 
 - **Dependency Injection** done with framework [TypeDi](https://github.com/typestack/typedi).
 - **Clear Structure** with different layers such as services, repositories, resolvers...
-- **GraphQl** query language for out application.
+- **GraphQl** query language for our application.
 - **Simplified DB** with the small local JSON database using [LowDb](https://github.com/typicode/lowdb).
 - **Logging system** using [Winston](https://github.com/winstonjs/winston).
 
